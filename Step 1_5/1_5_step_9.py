@@ -34,7 +34,6 @@ class ListObject:
         self.next_obj = obj
 
 
-
 # lst_in = list(map(str.strip, sys.stdin.readlines()))
 linked_list = []
 lst_in = ['1. Первые шаги в ООП',
