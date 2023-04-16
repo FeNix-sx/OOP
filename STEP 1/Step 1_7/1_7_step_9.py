@@ -35,22 +35,11 @@ class CardCheck:
         valid = lambda x: len(x) == 4 and x.isdigit()
         return all([all(map(valid, list_number)), len(list_number) == 4])
 
-        # if len(list_number) != 4:
-        #     valid = lambda x: len(x)!= 4 or not x.isdigit()
-        #     all([map(valid, list_number),len(list_number) != 4])
-        # else:
-        #     for num in list_number:
-        #         if len(num) != 4 or not num.isdigit():
-        #             return False
-        #
-        # return True
-
     @classmethod
     def check_name(cls, name: str):
         l_name = name.split()
         valid = lambda x: set(x) <= set(cls.CHARS_FOR_NAME)
         return all([all(map(valid, l_name)), len(l_name) == 2])
-            # return all([set(nam)<=set(cls.CHARS_FOR_NAME) for nam in name.split()])
 
 
 is_number = CardCheck.check_card_number("1238-5678-9012-0007")
