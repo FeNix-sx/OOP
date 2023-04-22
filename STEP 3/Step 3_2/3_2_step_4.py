@@ -1,39 +1,49 @@
 """
-Подвиг 2. Объявите класс RandomPassword для генерации случайных паролей. Объекты этого класса должны создаваться командой:
+Подвиг 3. Для последовательной обработки файлов из некоторого списка, например:
 
-rnd = RandomPassword(psw_chars, min_length, max_length)
-где psw_chars - строка из разрешенных в пароле символов; min_length, max_length - минимальная и максимальная длина генерируемых паролей.
+filenames = ["boat.jpg", "web.png", "text.txt", "python.doc", "ava.8.jpg", "forest.jpeg", "eq_1.png", "eq_2.png", "my.html", "data.shtml"]
+Необходимо объявить класс ImageFileAcceptor, который бы выделял только файлы с указанными расширениями.
 
-Непосредственная генерация одного пароля должна выполняться командой:
+Для этого предполагается создавать объекты класса командой:
 
-psw = rnd()
-где psw - ссылка на строку длиной в диапазоне [min_length; max_length] из случайно выбранных символов строки psw_chars.
+acceptor = ImageFileAcceptor(extensions)
+где extensions - кортеж с допустимыми расширениями файлов, например: extensions = ('jpg', 'bmp', 'jpeg').
 
-С помощью генератора списка (list comprehension) создайте список lst_pass из трех сгенерированных паролей объектом rnd класса RandomPassword, созданного с параметрами:
+А, затем, использовать объект acceptor в стандартной функции filter языка Python следующим образом:
 
-min_length = 5
-max_length = 20
-psw_chars = "qwertyuiopasdfghjklzxcvbnm0123456789!@#$%&*"
-P.S. Выводить на экран ничего не нужно, только создать список из паролей.
+image_filenames = filter(acceptor, filenames)
+Пример использования класса (эти строчки в программе писать не нужно):
 
-P.P.S. Дополнительное домашнее задание: попробуйте реализовать этот же функционал с использованием замыканий функций.
+filenames = ["boat.jpg", "web.png", "text.txt", "python.doc", "ava.jpg", "forest.jpeg", "eq_1.png", "eq_2.png"]
+acceptor = ImageFileAcceptor(('jpg', 'bmp', 'jpeg'))
+image_filenames = filter(acceptor, filenames)
+print(list(image_filenames))  # ["boat.jpg", "ava.jpg", "forest.jpeg"]
+P.S. Ваша задача только объявить класс ImageFileAcceptor. На экран ничего выводить не нужно.
 """
-from random import randint, sample
-class RandomPassword:
-    def __init__(self,psw_chars, min_length, max_length):
-        self.psw_chars= psw_chars
-        self.min_length = min_length
-        self.max_length = max_length
-    # Долго не мог понять, что надо еще что-то кроме класса создавать)
+class ImageFileAcceptor:
+    def __init__(self,extensions):
+        self.__extensions = extensions
+
     def __call__(self, *args, **kwargs):
-        return "".join(sample(self.psw_chars, randint(self.min_length, self.max_length+1)))
+        for extension in self.__extensions:
+            if "." + extension in args[0]:
+                return True
+
+        return False
+
+        # return all([extension in args[0] for extension in self.__extensions])
 
 
-min_length = 5
-max_length = 20
-psw_chars = "qwertyuiopasdfghjklzxcvbnm0123456789!@#$%&*"
-rnd = RandomPassword(psw_chars, min_length, max_length)
-psw = rnd()
-lst_pass = [psw for _ in range(3)]
+filenames = ["boat.jpg", "web.png", "text.txt", "python.doc", "ava.jpg", "forest.jpeg", "eq_1.png", "eq_2.png"]
+acceptor = ImageFileAcceptor(('jpg', 'bmp', 'jpeg'))
+image_filenames = filter(acceptor, filenames)
+print(list(image_filenames))  # ["boat.jpg", "ava.jpg", "forest.jpeg"]
 
-print(lst_pass)
+fs = ["boat.jpg", "web.png", "text.txt", "python.doc", "ava.8.jpg", "forest.jpeg", "eq_1.png", "eq_2.png", "my.html", "data.shtml"]
+acceptor = ImageFileAcceptor(("jpg", "png"))
+res = filter(acceptor, fs)
+assert set(res) == set(["boat.jpg", "web.png", "ava.8.jpg", "eq_1.png", "eq_2.png"]), "с помощью объекта класса ImageFileAcceptor был сформирован неверный список файлов"
+
+acceptor = ImageFileAcceptor(("jpeg", "html"))
+res = filter(acceptor, fs)
+assert set(res) == set(["forest.jpeg", "my.html"]), "с помощью объекта класса ImageFileAcceptor был сформирован неверный список файлов"
