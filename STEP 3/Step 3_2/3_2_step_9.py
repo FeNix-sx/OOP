@@ -45,8 +45,33 @@ class Handler:
         return wrapper
 """
 class Handler:
-    def __init__(self, methods):
+    def __init__(self, methods = ('GET',)):
         self.__methods = methods
+        # здесь нужные строчки
+
+    def __call__(self, func,*args, **kwargs):
+        def wrapper(request: dict, *args, **kwargs):
+            if "method" not in request.keys():
+                return self.get(func, request)
+
+            elif request.get("method", "GET") in self.__methods:
+                return {
+                    "GET": self.get(func, request),
+                    "POST": self.post(func, request)
+                }[request["method"]]
+            else:
+                return None
+            # здесь нужные строчки
+        return wrapper
+
+    def __getattribute__(self, item):
+        return object.__getattribute__(self, item)
+
+    def get(self, func, request, *args, **kwargs):
+        return f"GET: {func(request, *args, **kwargs)}"
+
+    def post(self, func, request, *args, **kwargs):
+        return f"POST: {func(request, *args, **kwargs)}"
 
 
 
@@ -54,4 +79,5 @@ class Handler:
 def contact(request):
     return "Сергей Балакирев"
 
-res = contact({"method": "POST", "url": "contact.html"})
+res = contact(dict())
+print(res)
