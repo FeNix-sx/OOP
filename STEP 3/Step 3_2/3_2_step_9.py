@@ -51,21 +51,12 @@ class Handler:
 
     def __call__(self, func,*args, **kwargs):
         def wrapper(request: dict, *args, **kwargs):
-            if "method" not in request.keys():
-                return self.get(func, request)
-
-            elif request.get("method", "GET") in self.__methods:
-                return {
-                    "GET": self.get(func, request),
-                    "POST": self.post(func, request)
-                }[request["method"]]
-            else:
-                return None
-            # здесь нужные строчки
+            if request.get("method", "GET") in self.__methods:
+                result = self.__getattribute__(request.get("method", "GET").lower())
+                if result == None:
+                    return None
+                return self.__getattribute__(request.get("method", "GET").lower())(func, request)
         return wrapper
-
-    def __getattribute__(self, item):
-        return object.__getattribute__(self, item)
 
     def get(self, func, request, *args, **kwargs):
         return f"GET: {func(request, *args, **kwargs)}"
