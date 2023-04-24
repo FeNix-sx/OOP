@@ -26,7 +26,6 @@ class InputDigits:
 # def input_dg():
 #     return input()
 
-
 input_dg = InputDigits(input)
 
 res = input_dg()
