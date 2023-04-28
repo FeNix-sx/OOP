@@ -33,10 +33,10 @@ class WordString:
         return self.words(indx)
 
     def __len__(self):
-        return len(list(self.__string.split()))
+        return len(self.__string.split())
 
     def words(self, indx):
-        return list(self.__string.split())[indx]
+        return self.__string.split()[indx]
 
     @property
     def string(self):
@@ -46,17 +46,10 @@ class WordString:
     def string(self, string: str):
         self.__string = string
 
-    def __str__(self):
-        return f"{self.__string}"
-
-    def __repr__(self):
-        return self.__string
-
 
 words = WordString()
 words.string = "Курс по Python    ООП от  Сергея Балакирева"
 n = len(words)
-print(words)
 first = "" if n == 0 else words(0)
 print(words.string)
 print(f"Число слов: {n}; первое слово: {first}")
