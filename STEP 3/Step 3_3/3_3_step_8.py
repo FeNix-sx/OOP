@@ -31,18 +31,37 @@ P.S. На экран ничего выводить не нужно, только
 """
 class RadiusVector:
     def __init__(self, *args):
-        self.__coord = list(args)
+        if len(args) == 1:
+            self.__coord = list(0 for _ in range(args[0]))
+        else:
+            self.__coord = list(args)
+
+    def set_coords(self, *args):
+        for i in range(min(len(args), len(self.__coord))):
+            self.__coord[i] = args[i]
+
 
     def get_coords(self):
-        pass
+        return tuple(self.__coord)
 
-    def set_coords(coord_1, coord_2, ..., coord_N):
-        pass
+    def __len__(self):
+        return len(self.__coord)
+
+    def __abs__(self):
+        return (sum(coord**2 for coord in self.__coord))**(1/2)
+
+    # def set_coords(coord_1, coord_2, ..., coord_N):
+    #     pass
 
 
-
-# создание 5-мерного радиус-вектора с нулевыми значениями координат (аргумент - целое число больше 1)
-vector = RadiusVector(5)  # координаты: 0, 0, 0, 0, 0
-
-# создание 4-мерного радиус-вектора с координатами: 1, -5, 3.4, 10 (координаты - любые целые или вещественные числа)
-vector = RadiusVector(1, -5, 3.4, 10)
+vector3D = RadiusVector(3)
+vector3D.set_coords(3, -5.6, 8)
+a, b, c = vector3D.get_coords()
+vector3D.set_coords(3, 9, 8, 10, 11) # ошибки быть не должно, последние две координаты игнорируются
+print(vector3D.get_coords())
+vector3D.set_coords(1, 2) # ошибки быть не должно, меняются только первые две координаты
+print(vector3D.get_coords())
+res_len = len(vector3D) # res_len = 3
+print(res_len)
+res_abs = abs(vector3D)
+print(res_abs)
