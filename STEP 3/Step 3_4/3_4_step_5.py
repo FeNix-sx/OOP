@@ -29,43 +29,45 @@ lst = res_2.get_list() # [1, 2, 3]
 P.S. В программе требуется только объявить класс. На экран ничего выводить не нужно.
 """
 class NewList:
-    def __init__(self, lst: list=[]) -> None:
-        self.__lst = lst
+    def __init__(self, lst: list=None) -> None:
+        self.__lst = lst[:] if lst and type(lst)==list else []
+
+    def get_list(self):
+        return self.__lst
 
     def __sub__(self, other):
         if not isinstance(other, (list, NewList)):
             raise TypeError("Необходимо задать список или класс NewList")
 
         reduced = [(item, type(item)) for item in self.__lst]
-        if isinstance(other, NewList):
-            deductible = [(item, type(item)) for item in other.__lst]
-        else:
-            deductible = [(item, type(item)) for item in other]
+        deductible = [(item, type(item)) for item in other.__lst] if type(other) == NewList \
+            else [(item, type(item)) for item in other]
 
-        for item in deductible:
-            if item in reduced:
-                reduced.remove(item)
-
-        return NewList(list(map(lambda x: x[0], reduced)))
+        return NewList(self.__subtraction(reduced, deductible))
 
     def __rsub__(self, other):
         if not isinstance(other, (list, NewList)):
             raise TypeError("Необходимо задать список или класс NewList")
 
         deductible = [(item, type(item)) for item in self.__lst]
-        if isinstance(other, NewList):
-            reduced = [(item, type(item)) for item in other.__lst]
-        else:
-            reduced = [(item, type(item)) for item in other]
+        reduced = [(item, type(item)) for item in other.__lst] if type(other) == NewList \
+            else [(item, type(item)) for item in other]
 
+        return NewList(self.__subtraction(reduced, deductible))
+
+    @staticmethod
+    def __subtraction(reduced: list, deductible: list) -> list:
+        """
+        реализация вычитания
+        :param reduced: уменьшаемое
+        :param deductible: вычитаемое
+        :return: список
+        """
         for item in deductible:
             if item in reduced:
                 reduced.remove(item)
 
-        return NewList(list(map(lambda x: x[0], reduced)))
-
-    def get_list(self):
-        return self.__lst
+        return list(map(lambda x: x[0], reduced))
 
 
 lst1 = NewList([1, 2, -4, 6, 10, 11, 15, False, True])
