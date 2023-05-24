@@ -1,8 +1,6 @@
 """
 Подвиг 6. Реализуйте односвязный список (не список Python, не использовать список Python для хранения объектов), когда один объект ссылается на следующий и так по цепочке до последнего:
 
-
-
 Для этого объявите в программе два класса:
 
 StackObj - для описания объектов односвязного списка;
@@ -68,13 +66,14 @@ class StackObj:
     def data(self, data: str):
         self.__data = [self.__data, data][type(data) == str]
 
+
 class Stack:
     def __init__(self):
         self.__stack = list()
         self.top = None
 
     def push(self, obj):
-        if  self.__stack:
+        if self.__stack:
             self.__stack.append(obj)
             self.__stack[-2].next = obj
         else:
