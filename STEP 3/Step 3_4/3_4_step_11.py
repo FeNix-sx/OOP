@@ -9,10 +9,10 @@
 
 Мы повторим эту процедуру. Для этого в программе нужно объявить класс с именем MaxPooling, объекты которого создаются командой:
 
-mp = MaxPooling(step=(2, 2), size=(2,2))
-где step - шаг смещения окна по горизонтали и вертикали; size - размер окна по горизонтали и вертикали.
+mp = MaxPooling(__step=(2, 2), __size=(2,2))
+где __step - шаг смещения окна по горизонтали и вертикали; __size - размер окна по горизонтали и вертикали.
 
-Параметры step и size по умолчанию должны принимать кортеж со значениями (2, 2).
+Параметры __step и __size по умолчанию должны принимать кортеж со значениями (2, 2).
 
 Для выполнения операции Max Pooling используется команда:
 
@@ -26,7 +26,7 @@ res = mp(matrix)
 raise ValueError("Неверный формат для первого параметра matrix.")
 Пример использования класса (эти строчки в программе писать не нужно):
 
-mp = MaxPooling(step=(2, 2), size=(2,2))
+mp = MaxPooling(__step=(2, 2), __size=(2,2))
 res = mp([[1, 2, 3, 4], [5, 6, 7, 8], [9, 8, 7, 6], [5, 4, 3, 2]])    # [[6, 8], [9, 7]]
 Результатом будет таблица чисел:
 
@@ -37,40 +37,52 @@ P.S. В программе достаточно объявить только к
 """
 class MaxPooling:
     def __init__(self, step: tuple=(2, 2), size: tuple=(2,2)) -> None:
-        self.step = step
-        self.size = size
+        self.__step = step
+        self.__size = size
 
     @staticmethod
-    def __check_matrix(matrix: list) -> None:
+    def __check_matrix(matrix: list) -> list:
         row = len(matrix[0])
+        colunm = len(matrix[0]) if row > 0 else 0
+
         for column in matrix:
             if row != len(column) or False in [isinstance(item, (float, int)) for item in column]:
                 raise ValueError("Неверный формат для первого параметра matrix.")
 
+        return [row, colunm]
+
     def __call__(self, matrix, *args, **kwargs):
-        self.__check_matrix(matrix)
-        temp_matrix = [[0 for i in range(self.size[0])]for _ in range(self.size[1])]
-        row, colunm = len(matrix), len(matrix[0])
+        row, colunm = self.__check_matrix(matrix)
+        temp_matrix = [[0 for i in range(self.__size[0])] for _ in range(self.__size[1])]
+        r_step, c_step = self.__step[0], self.__step[1]
+
+        if row == 0:
+            return []
+
         result, max_list = list(), list()
         r_start, c_start = 0, 0
 
         while True:
-            if r_start >= colunm:
+            if row - r_start < self.__size[0]:
                 break
-            for r in range(self.step[0]):
-                for c in range(self.step[1]):
+            for r in range(self.__size[0]):
+                for c in range(self.__size[1]):
                     temp_matrix[r][c] = matrix[r_start+r][c_start+c]
 
-            max_list.append(max(max(item) for item in temp_matrix))
-            c_start += self.step[0]
-            if row - c_start >= self.step[0]:
+            max_list.append(max(max(item) for item  in temp_matrix))
+            c_start += c_step
+
+            if colunm - c_start >= self.__size[1]:
                 continue
+
+            r_start += r_step
             result.append(max_list)
-            r_start += self.step[0]
-            c_start, matrix = 0, list()
+            c_start, max_list = 0, list()
+
+        return result
 
 
 
-
-mp = MaxPooling(step=(2, 2), size=(2,2))
+mp = MaxPooling(step=(2, 2), size=(2, 2))
 res = mp([[1, 2, 3, 4], [5, 6, 7, 8], [9, 8, 7, 6], [5, 4, 3, 2]])    # [[6, 8], [9, 7]]
+print(res)
