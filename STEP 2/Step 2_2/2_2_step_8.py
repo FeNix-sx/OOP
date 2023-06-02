@@ -38,6 +38,7 @@ class RadiusVector2D:
     def __init__(self, x=0, y=0):
         self.__x = [0, x][self.__check_coord(x)]
         self.__y = [0, y][self.__check_coord(y)]
+
     @property
     def x(self):
         return self.__x
