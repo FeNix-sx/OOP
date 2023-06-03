@@ -54,12 +54,8 @@ class StringText:
 
 
 lst_text = [StringText(words.split()) for words in stich]
-print([len(lst) for lst in lst_text])
 lst_text_sorted = sorted(lst_text, key=len, reverse=True)
-print([len(lst) for lst in lst_text_sorted])
 lst_text_sorted = [" ".join(lst.text) for lst in lst_text_sorted]
-
-print(*lst_text_sorted, sep="\n")
 
 # TEST-TASK___________________________________
 assert all([[True if i in _ else False for i in "–?!,.;"] for _ in stich]), \
