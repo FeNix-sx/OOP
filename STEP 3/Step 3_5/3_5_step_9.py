@@ -62,211 +62,67 @@ else:
     print("нужно поднажать")
 P.S. В программе на экран ничего выводить не нужно, только объявить классы.
 """
+
+
+class Money:
+    def __init__(self, volume=0.):
+        self.cb, self.volume = None, volume
+
+    @property
+    def cb(self): return self.__cb
+
+    @cb.setter
+    def cb(self, value): self.__cb = value
+
+    @property
+    def volume(self): return self.__volume
+
+    @volume.setter
+    def volume(self, value): self.__volume = value
+
+    def __abs__(self):
+        if not self.cb:
+            raise ValueError("Неизвестен курс валют.")
+        return self.cb.convert(self.volume, self.prop, 'rub')
+
+    def __eq__(self, other):
+        return abs(abs(self) - abs(other)) <= 0.1
+
+    def __gt__(self, other):
+        return abs(self) - abs(other) > 0.1
+
+    def __ge__(self, other):
+        return abs(self) - abs(other) >= 0.1
+
+
+class MoneyR(Money):
+    prop = 'rub'
+
+
+class MoneyD(Money):
+    prop = 'dollar'
+
+
+class MoneyE(Money):
+    prop = 'euro'
+
+
 class CentralBank:
     rates = {'rub': 72.5, 'dollar': 1.0, 'euro': 1.15}
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls):
         return None
 
     @classmethod
     def register(cls, money):
-        money.cb = cls
+        if isinstance(money, Money):
+            money.cb = cls
 
-
-class MoneyR:
-    def __init__(self, volume: int=0):
-        self.__cb = None
-        self.__volume = [0, volume][self.__check_value(volume)]
-
-    @staticmethod
-    def __check_value(val):
-        if val:
-            return True
-        return False
-
-    @staticmethod
-    def __check_cb(cb):
-        if not cb:
-            raise ValueError("Неизвестен курс валют.")
-
-    def calculate(self):
-        return self.volume / self.cb.rates['rub']
-
-    @property
-    def cb(self):
-        return self.__cb
-
-    @cb.setter
-    def cb(self, cb: CentralBank=None):
-        self.__cb = cb
-
-    @property
-    def volume(self):
-        return self.__volume
-
-    @volume.setter
-    def volume(self, vol: float=0):
-        self.__volume = vol
-
-    def __eq__(self, other):
-        """равно"""
-        self.__check_cb(self.cb)
-        self.__check_cb(other.cb)
-        a = self.calculate()
-        b = other.calculate()
-        return abs(a - b) <= 0.1
-
-    def __lt__(self, other):
-        """меньше"""
-        self.__check_cb(self.cb)
-        self.__check_cb(other.cb)
-        a = self.calculate()
-        b = other.calculate()
-        return a < b
-
-    def __le__(self, other):
-        """меньше или равно"""
-        self.__check_cb(self.cb)
-        self.__check_cb(other.cb)
-        a = self.calculate()
-        b = other.calculate()
-        return a - b >= 0.1
-
-
-class MoneyD:
-    def __init__(self, volume: int=0):
-        self.__cb = None
-        self.__volume = [0, volume][self.__check_value(volume)]
-
-    def calculate(self):
-        return self.volume / self.cb.rates['dollar']
-
-    @staticmethod
-    def __check_value(val):
-        if val:
-            return True
-        return False
-
-    @staticmethod
-    def __check_cb(cb):
-        if not cb:
-            raise ValueError("Неизвестен курс валют.")
-
-    @property
-    def cb(self):
-        return self.__cb
-
-    @cb.setter
-    def cb(self, cb: CentralBank=None):
-        self.__cb = cb
-
-    @property
-    def volume(self):
-        return self.__volume
-
-    @volume.setter
-    def volume(self, vol: float=0):
-        self.__volume = vol
-
-    def __eq__(self, other):
-        """равно"""
-        a = self.calculate()
-        b = other.calculate()
-        return abs(a - b) <= 0.1
-
-    def __lt__(self, other):
-        """меньше"""
-        self.__check_cb(self.cb)
-        self.__check_cb(other.cb)
-        a = self.calculate()
-        b = other.calculate()
-        return a < b
-
-    def __le__(self, other):
-        """меньше или равно"""
-        self.__check_cb(self.cb)
-        self.__check_cb(other.cb)
-        a = self.calculate()
-        b = other.calculate()
-        return b - a >= 0.1
-
-    def __ge__(self, other):
-        """больше или равно"""
-        self.__check_cb(self.cb)
-        self.__check_cb(other.cb)
-        a = self.calculate()
-        b = other.calculate()
-        return a - b >= 0.1
-
-class MoneyE:
-    def __init__(self, volume: int=0):
-        self.__cb = None
-        self.__volume = [0, volume][self.__check_value(volume)]
-
-    def calculate(self):
-        return self.volume / self.cb.rates['euro']
-
-    @staticmethod
-    def __check_value(val):
-        if val:
-            return True
-        return False
-
-    @staticmethod
-    def __check_cb(cb):
-        if not cb:
-            raise ValueError("Неизвестен курс валют.")
-
-    @property
-    def cb(self):
-        return self.__cb
-
-    @cb.setter
-    def cb(self, cb: CentralBank=None):
-        self.__cb = cb
-
-    @property
-    def volume(self):
-        return self.__volume
-
-    @volume.setter
-    def volume(self, vol: float=0):
-        self.__volume = vol
-
-    def __eq__(self, other):
-        """равно"""
-        a = self.calculate()
-        b = other.calculate()
-        return abs(a - b) <= 0.1
-
-    def __lt__(self, other):
-        """меньше"""
-        self.__check_cb(self.cb)
-        self.__check_cb(other.cb)
-        a = self.calculate()
-        b = other.calculate()
-        return a < b
-
-    def __le__(self, other):
-        """меньше или равно"""
-        self.__check_cb(self.cb)
-        self.__check_cb(other.cb)
-        a = self.calculate()
-        b = other.calculate()
-        return b - a >= 0.1
-
-
-
-# rub = MoneyR()  # с нулевым балансом
-# dl = MoneyD(1501.25)  # с балансом в 1501.25 долларов
-# euro = MoneyE(100)  # с балансом в 100 евро
-# print(rub.cb)
-# CentralBank.register(rub)
-# print(rub.cb)
-# CentralBank.register(dl)
-# CentralBank.register(euro)
-# print(rub.cb)
-
+    @classmethod
+    def convert(cls, _value, _from, _to):
+        if _from == _to:
+            return _value
+        return _value * cls.rates.get(_to) / cls.rates.get(_from)
 
 
 # Тест сугубо для помощи тем кто пытается решить своими силами.
