@@ -35,10 +35,7 @@ class Dimensions:
     def __hash__(self):
         return hash((self.a, self.b, self.c))
 
-    def __gt__(self, other):
-        """больше"""
-        if isinstance(other, Dimensions):
-            return hash(self) >= hash(other)
+
 
 s_inp = "1 2 3; 4 5 6.78; 1 2 3; 3 1 2.5"
 # s_inp = input()
@@ -47,4 +44,4 @@ lst_dims = []
 for item in s_inp.split(";"):
     lst_dims.append(Dimensions(*list(map(float, item.split()))))
 
-lst_dims.sort()
+lst_dims.sort(key=hash)
