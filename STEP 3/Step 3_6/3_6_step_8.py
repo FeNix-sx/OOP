@@ -71,7 +71,9 @@ class Record:
 
     def __eq__(self, other):
         """равно"""
-        pass
+        if isinstance(other, Record):
+            return hash(self) == hash(other)
+        raise TypeError("тип должен быть Record")
 
 
 class DataBase:
