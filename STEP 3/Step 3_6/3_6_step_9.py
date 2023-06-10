@@ -51,4 +51,5 @@ for str_item in lst_in:
     name, author, year = str_item.split(";")
     lst_bs.append(BookStudy(name, author, int(year)))
 
+print(*lst_bs)
 unique_books = len(set(lst_bs))

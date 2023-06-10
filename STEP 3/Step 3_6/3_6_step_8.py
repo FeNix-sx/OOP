@@ -57,14 +57,18 @@ Sample Input:
 Балакирев С.М.; преподаватель; 33
 """
 class Record:
-    def __new__(cls, *args, **kwargs):
-        pass
+    __personal_key = 0
 
-    def __init__(self, fio, descr, old):
+    @classmethod
+    def __pk(cls):
+        cls.__personal_key += 1
+        return cls.__personal_key
+
+    def __init__(self, fio: str=None, descr: str=None, old: int=0):
         self.fio = fio
         self.descr = descr
         self.old = old
-        self.pk = 0
+        self.pk = self.__pk()
 
     def __hash__(self):
         return hash((self.fio, self.old))
@@ -83,11 +87,18 @@ class DataBase:
 
     def write(self, record):
         """добавление новой записи в БД, представленной объектом record"""
-        self.dict_db[record] = None
+        if isinstance(record, Record):
+            self.dict_db[record] = self.dict_db.setdefault(record,[]) + [record]
+        else:
+            raise TypeError("тип данных должен быть Record")
 
     def read(self, pk):
         """чтение записи из БД (возвращает объект Record) по ее уникальному
         идентификатору pk (уникальное целое положительное число); запись ищется в значениях словаря"""
+        for key in self.dict_db.keys():
+            for itm in self.dict_db[key]:
+                if itm.pk == pk:
+                    return itm
 
 
 lst_in = ['Балакирев С.М.; программист; 33',
@@ -97,6 +108,14 @@ lst_in = ['Балакирев С.М.; программист; 33',
           'Балакирев С.М.; преподаватель; 33'
           ]
 
+db = DataBase("12121")
 
-db = DataBase()
-record = Record()
+for str_item in lst_in:
+    fio, descr, old = str_item.split(";")
+    db.write(Record(fio, descr, int(old)))
+
+
+db22345 = DataBase('123')
+r1 = Record('fio', 'descr', 10)
+r2 = Record('fio', 'descr', 10)
+print(db.read(3))
