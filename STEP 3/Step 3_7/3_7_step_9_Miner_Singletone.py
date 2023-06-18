@@ -26,57 +26,34 @@ P.S. На экран ничего выводить не нужно.
 """
 import random
 
+class CellDescr:
+    def __set_name__(self, owner, name):
+        self.name = f'_{owner.__name__}__{name}'
+
+    def __set__(self, instance, value):
+        if not (isinstance(value, int) and 0 <= value <= 8):
+            raise ValueError("недопустимое значение атрибута")
+        return setattr(instance, self.name, value)
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return property()
+        return getattr(instance, self.name)
+
+
 class Cell:
-    """
-    представление клетки игрового поля
-    """
+    is_mine = CellDescr()
+    number = CellDescr()
+    is_open = CellDescr()
 
     def __init__(self):
-        """"""
-        # булево значение True/False; True - в клетке находится мина, False - мина отсутствует;
         self.__is_mine = False
         self.__number = 0
         self.__is_open = False
 
-    @property
-    def number(self):
-        """число мин вокруг клетки (целое число от 0 до 8)"""
-        return self.__number
-
-    @number.setter
-    def number(self, val):
-        """число мин вокруг клетки (целое число от 0 до 8)"""
-        if isinstance(val, int) and 0 <= val <= 8:
-            self.__number = val
-        else:
-            raise ValueError("недопустимое значение атрибута")
-
-    @property
-    def is_mine(self):
-        return self.__is_mine
-
-    @is_mine.setter
-    def is_mine(self, val):
-        if isinstance(val, bool):
-            self.__is_mine = val
-        else:
-            raise ValueError("недопустимое значение атрибута")
-
-    @property
-    def is_open(self):
-        """флаг того, открыта клетка или закрыта: True - открыта; False - закрыта."""
-        return self.__is_open
-
-    @is_open.setter
-    def is_open(self, val):
-        """флаг того, открыта клетка или закрыта: True - открыта; False - закрыта."""
-        if isinstance(val, bool):
-            self.__is_open = val
-        else:
-            raise ValueError("недопустимое значение атрибута")
-
     def __bool__(self):
-        return self.__is_open == False
+        return not self.is_open
+
 
 class GamePole:
     __instance = None
