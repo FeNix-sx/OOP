@@ -118,7 +118,7 @@ class GamePole:
         """отображает игровое поле в консоли (как именно сделать - на ваше усмотрение,
         этот метод - домашнее задание)."""
         for row in self.__pole_cells:
-            [print("*" if cell.is_mine else cell.number, end=" ") for cell in row]
+            [print("◕" if cell.is_mine else cell.number, end=" ") for cell in row]
             print()
 
     def chec_i(self, row: int, col: int):
@@ -135,7 +135,7 @@ class GamePole:
         return 0
 
 
-pole = GamePole(10, 20, 20)  # создается поле размерами 10x20 с общим числом мин 10
+pole = GamePole(20, 40, 120)  # создается поле размерами 10x20 с общим числом мин 10
 
 pole.init_pole()
 if pole.pole[0][1]:
