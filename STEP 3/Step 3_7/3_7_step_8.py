@@ -24,33 +24,26 @@ Ellipse(x1, y1, x2, y2)
 
 P.S. На экран ничего выводить не нужно.
 """
-class SetCoord:
-    def __set_name__(self, owner, name):
-        self.name = "" + name
-
-    def __get__(self, instance, owner):
-        return getattr(instance, self.name)
-
-    def __set__(self, instance, value):
-        setattr(instance, value)
-
 
 class Ellipse:
-    x1 = SetCoord()
-    y1 = SetCoord()
-    x2 = SetCoord()
-    y2 = SetCoord()
-
-    def __init__(self):
-        self.x1, self.y1, self.x2, self.y2 = self.get_coords()
+    def __init__(self, *agrs):
+        if len(agrs):
+            self.x1, self.y1, self.x2, self.y2 = agrs
 
     def __bool__(self):
-        return all((self.x1, self.y1, self.x2, self.y2))
+        return hasattr(self, 'x1') and hasattr(self, 'y1') and hasattr(self, 'x2') and hasattr(self, 'y2')
 
     def get_coords(self):
-        if  self.__bool__():
-            return (self.x1, self.y1, self.x2, self.y2)
-        raise AttributeError('нет координат для извлечения')
+        if not bool(self):
+            raise AttributeError('нет координат для извлечения')
+        return (self.x1, self.y1, self.x2, self.y2)
+
+
+lst_geom = [Ellipse(), Ellipse(), Ellipse(1, 2, 3, 4), Ellipse(5, 6, 7, 8)]
+
+for item in lst_geom:
+    if bool(item):
+        item.get_coords()
 
 
 lst_geom = [Ellipse(), Ellipse(), Ellipse(1, 2, 3, 4), Ellipse(5, 6, 7, 8)]
