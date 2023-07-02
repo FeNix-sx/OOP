@@ -32,17 +32,8 @@ class RadiusVector:
     def __init__(self, *args):
         self.coords = list(args)
 
-    def __chesk_ind(self, ind):
-        if isinstance(ind, int) and 0 <= ind < len(self.coords):
-            return
-        # raise IndexError('некорректный индекс')
-
     def __getitem__(self, index):
-        if isinstance(index, int):
-            self.__chesk_ind(index)
-            return self.coords[index]
-        elif isinstance(index, slice):
-            return tuple(self.coords[slice(index.start,index.stop,index.step)])
+        return tuple(self.coords[index]) if isinstance(index, slice) else self.coords[index]
 
     def __setitem__(self, key, *args):
         if isinstance(key, slice):
