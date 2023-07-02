@@ -35,11 +35,8 @@ class RadiusVector:
     def __getitem__(self, index):
         return tuple(self.coords[index]) if isinstance(index, slice) else self.coords[index]
 
-    def __setitem__(self, key, *args):
-        if isinstance(key, slice):
-            self.coords[slice(key.start,key.stop,key.step)] = [i for i in args[0]]
-        elif isinstance(key, int):
-            self.coords[key] = args[0]
+    def __setitem__(self, key, value):
+        self.coords[key] = value
 
 
 v = RadiusVector(1, 1, 1, 1)
