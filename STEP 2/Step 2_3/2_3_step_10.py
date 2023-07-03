@@ -1,7 +1,7 @@
 """
 Подвиг 9 (на повторение). Необходимо объявить класс Bag (рюкзак), объекты которого будут создаваться командой:
 
-bag = Bag(max_weight)
+things = Bag(max_weight)
 где max_weight - максимальный суммарный вес вещей, который выдерживает рюкзак (целое число).
 
 В каждом объекте этого класса должен создаваться локальный приватный атрибут:
@@ -30,13 +30,13 @@ weight - вес предмета.
 
 Пример использования классов (эти строчки в программе писать не нужно):
 
-bag = Bag(1000)
-bag.add_thing(Thing("Книга по Python", 100))
-bag.add_thing(Thing("Котелок", 500))
-bag.add_thing(Thing("Спички", 20))
-bag.add_thing(Thing("Бумага", 100))
-w = bag.get_total_weight()
-for t in bag.things:
+things = Bag(1000)
+things.add_thing(Thing("Книга по Python", 100))
+things.add_thing(Thing("Котелок", 500))
+things.add_thing(Thing("Спички", 20))
+things.add_thing(Thing("Бумага", 100))
+w = things.get_total_weight()
+for t in things.things:
     print(f"{t.name}: {t.weight}")
 P.S. В программе требуется объявить классы с описанным функционалом. На экран в программе выводить ничего не нужно.
 """
@@ -93,6 +93,6 @@ bag.add_thing(Thing("Котелок", 500))
 bag.add_thing(Thing("Спички", 20))
 bag.add_thing(Thing("Бумага", 100))
 w = bag.get_total_weight()
-# print(bag.things())
+# print(things.things())
 for t in bag.things:
     print(f"{t.name}: {t.weight}")
