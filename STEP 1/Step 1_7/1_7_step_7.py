@@ -7,8 +7,8 @@ class Loader:
     def parse_format(string, factory):
         seq = factory.build_sequence()
         for sub in string.split(","):
-            item = factory.build_number(sub)
-            seq.append(item)
+            indx = factory.build_number(sub)
+            seq.append(indx)
 
         return seq
 И предполагается его использовать следующим образом:
