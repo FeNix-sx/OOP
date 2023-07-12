@@ -74,24 +74,30 @@ class TicTacToe:
     def clear(self):
         self.pole = tuple(tuple(Cell() for _ in range(3)) for _ in range(3))
 
-    def __getitem__(self, item):
-        if isinstance(item, tuple):
-            if isinstance(item[1],slice):
-                # строка
-                return tuple(it.value for it in self.pole[item[0]][item[1]])
-            elif isinstance(item[0],slice):
-                # столбец
-                return tuple(self.pole[i][item[1]].value for i in range(3))
-            elif isinstance(item[0],int) and isinstance(item[1],int):
-                return self.pole[item[0]][item[1]].value
-    def __setitem__(self, key, value):
-        if key[0] < 3 and key[1] < 3:
-            if self.pole[key[0]][key[1]]:
-                self.pole[key[0]][key[1]].value = value
-            else:
-                raise ValueError('клетка уже занята')
-        else:
+    def __check(self, item):
+        if type(item) != tuple and len(item) != 2:
             raise IndexError('неверный индекс клетки')
+
+        if any(not (0 <= i < 3) for i in item if type(item) != slice):
+            raise IndexError('неверный индекс клетки')
+
+    def __getitem__(self, item):
+        row, col = item
+        if isinstance(col,slice):   # строка
+            return tuple(it.value for it in self.pole[item[0]][col])
+        elif isinstance(row,slice): # столбец
+            return tuple(self.pole[i][col].value for i in range(3))
+
+        return self.pole[row][col].value
+
+    def __setitem__(self, key, value):
+        self.__check(item=key)
+        row, col = key
+        if self.pole[row][col]:
+            self.pole[row][col].value = value
+        else:
+            raise ValueError('клетка уже занята')
+
 
 
 game = TicTacToe()
