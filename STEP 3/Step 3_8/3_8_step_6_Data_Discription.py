@@ -52,28 +52,68 @@ P.P.S. В качестве домашнего задания создайте к
 Последнее: дескрипторы здесь для повторения. В реальной разработке лучше использовать в таких задачах объекты-свойства (property).
 """
 class IntegerValue:
-    class StringValue:
-        """ ДИСКРИПТОР ДАННЫХ"""
-        def __set_name__(self, owner, name):
-            self.name = name
+    """ ДИСКРИПТОР ДАННЫХ"""
+    def __set_name__(self, owner, name):
+        self.name = '_' + name
 
-        def __get__(self, instance, owner):
-            return getattr(instance, self.name)
+    def __get__(self, instance, owner):
+        return getattr(instance, self.name)
 
-        def __set__(self, instance, value):
-            if instance(value, int) and value >= 0:
-                setattr(instance, self.name, value)
-            else:
-                raise ValueError('возможны только целочисленные значения')
+    def __set__(self, instance, value):
+        if isinstance(value, int) and value >= 0:
+            setattr(instance, self.name, value)
+        else:
+            raise ValueError('возможны только целочисленные значения')
 
 
 class CellInteger:
-    start_value = IntegerValue()
-    def __init__(self, start_value=0):
+    value = IntegerValue()
+
+    def __init__(self, start_value: int=0):
         self.value = start_value
 
 
-
-
 class TableValues:
-    pass
+    rows = IntegerValue()
+    cols = IntegerValue()
+
+    def __init__(self, rows, cols, cell: CellInteger=None):
+        self.rows = rows
+        self.cols = cols
+        if not cell:
+            raise ValueError('параметр cell не указан')
+        self.cells = tuple(tuple(cell(0) for _ in range(cols)) for _ in range(rows))
+
+    def out_cells(self):
+        print(*self.cells, sep='\n')
+
+    def __check_indx(self, indx):
+        if not isinstance(indx, tuple) and len(indx) != 2:
+            raise ValueError('индекс указан не верно')
+
+    def __getitem__(self, item):
+        self.__check_indx(item)
+        return self.cells[item[0]][item[1]].value
+
+    def __setitem__(self, key, value):
+        self.__check_indx(key)
+        self.cells[key[0]][key[1]].value = value
+
+
+# cell = CellInteger(1)
+# print(cell.value)
+# rows, cols = 2, 3
+# table = TableValues(rows, cols)
+# value = table[1, 2] # возвращает значение ячейки с индексом (1, 2)
+# table[0, 0] = value # записывает новое значение в ячейку (0, 0)
+
+table = TableValues(2, 3, cell=CellInteger)
+print(table[0, 1])
+table[1, 1] = 10
+# table[0, 0] = 1.45 # генерируется исключение ValueError
+
+# вывод таблицы в консоль
+for row in table.cells:
+    for x in row:
+        print(x.value, end=' ')
+    print()
