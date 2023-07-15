@@ -78,34 +78,30 @@ class TableValues:
     cols = IntegerValue()
 
     def __init__(self, rows, cols, cell: CellInteger=None):
-        self.rows = rows
-        self.cols = cols
         if not cell:
             raise ValueError('параметр cell не указан')
-        self.cells = tuple(tuple(cell(0) for _ in range(cols)) for _ in range(rows))
+
+        self.rows = rows
+        self.cols = cols
+        self.cells = tuple(tuple(cell() for _ in range(cols)) for _ in range(rows))
 
     def out_cells(self):
         print(*self.cells, sep='\n')
 
     def __check_indx(self, indx):
-        if not isinstance(indx, tuple) and len(indx) != 2:
+        r, c = indx
+        if not(type(r) == int and type(c) == int and 0 <= r <self.rows and 0 <= c <self.cols):
             raise ValueError('индекс указан не верно')
 
     def __getitem__(self, item):
         self.__check_indx(item)
-        return self.cells[item[0]][item[1]].value
+        r, c = item
+        return self.cells[r][c].value
 
     def __setitem__(self, key, value):
         self.__check_indx(key)
-        self.cells[key[0]][key[1]].value = value
-
-
-# cell = CellInteger(1)
-# print(cell.value)
-# rows, cols = 2, 3
-# table = TableValues(rows, cols)
-# value = table[1, 2] # возвращает значение ячейки с индексом (1, 2)
-# table[0, 0] = value # записывает новое значение в ячейку (0, 0)
+        r, c = key
+        self.cells[r][c].value = value
 
 table = TableValues(2, 3, cell=CellInteger)
 print(table[0, 1])
