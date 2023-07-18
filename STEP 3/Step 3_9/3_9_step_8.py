@@ -28,20 +28,11 @@ class IterColumn:
         self.lst = lst
         self.__indx = column
 
-    # def __iter__(self):
-    #     for i in range(len(self.lst)):
-    #         yield self.lst[i]
-
     def __iter__(self):
-        self.__col = -1
-        return self
+        for i in range(len(self.lst)):
+            yield self.lst[i][self.__indx]
 
-    def __next__(self):
-        self.__col += 1
-        if self.__col < len(self.lst):
-            return self.lst[self.__col][self.__indx]
-        else:
-            raise StopIteration
+
 
 lst = [['x00', 'x01', 'x02'],
        ['x10', 'x11', 'x12'],
