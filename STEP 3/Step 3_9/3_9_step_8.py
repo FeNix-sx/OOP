@@ -29,8 +29,8 @@ class IterColumn:
         self.__indx = column
 
     def __iter__(self):
-        for i in range(len(self.lst)):
-            yield self.lst[i][self.__indx]
+        for item in self.lst:
+            yield item[self.__indx]
 
 
 
