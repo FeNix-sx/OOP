@@ -78,6 +78,7 @@ ls = [['1'],
       [2, 3],
       [4, 5, 6],
       ['7', 8, '9', 10]]
+
 ls_one = [x for row in ls for x in row]
 t = TriangleListIterator(ls)
 for i, x in enumerate(t):
