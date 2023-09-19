@@ -92,26 +92,16 @@ class GenericView:
         pass
 
 class DetailView(GenericView):
-    def __init__(self, methods=('GET',)):
-        super().__init__(methods)
-
     def render_request(self, request, method):
-        dict_metods = {
-            'GET': self.get,
-            'POST': self.post,
-            'PUT': self.put,
-            'DELETE': self.delete
-        }
-
-        if method in self.methods:
-            return dict_metods[method](request)
-        else:
+        if method not in self.methods:
             raise TypeError('данный запрос не может быть выполнен')
+        res = self.__getattribute__(method.lower())(request)
+        return res
 
     def get(self, request):
         if not isinstance(request, dict):
             raise TypeError('request не является словарем')
-        elif 'url' not in request.keys():
+        if "url" not in request:
             raise TypeError('request не содержит обязательного ключа url')
         return f"url: {request['url']}"
 
