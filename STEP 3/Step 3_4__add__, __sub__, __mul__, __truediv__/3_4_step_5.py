@@ -1,4 +1,5 @@
 """
+https://proproprogs.ru/python_oop/magicheskie-metody-add-sub-mul-truediv
 Подвиг 4. Известно, что в Python мы можем соединять два списка между собой с помощью оператора +:
 
 lst = [1, 2, 3] + [4.5, -3.6, 0.78]
