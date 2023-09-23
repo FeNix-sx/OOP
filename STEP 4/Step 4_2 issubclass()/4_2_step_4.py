@@ -52,4 +52,4 @@ s[1] = 10
 s.append(11)
 print(s)
 print(s[-2])
-s[0] = 10.5 # TypeError
+# s[0] = 10.5 # TypeError
