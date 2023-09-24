@@ -22,4 +22,13 @@ t = (t + "Python") + "ООП"
 P.S. В программе нужно объявить только класс. На экран выводить ничего не нужно.
 """
 class Tuple(tuple):
-    pass
+    def __add__(self, other):
+        return Tuple(tuple(self) + tuple(other))
+
+
+t = Tuple([1, 2, 3])
+print(type(t))
+t = t + "Python"
+print(t, type(t))   # (1, 2, 3, 'P', 'y', 't', 'h', 'o', 'n')
+t = (t + "Python") + "ООП"
+print(t, type(t))
