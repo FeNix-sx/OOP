@@ -23,13 +23,14 @@ s[0] = 10.5 # TypeError
 P.S. В программе нужно объявить только класс. На экран выводить ничего не нужно.
 """
 class ListInteger(list):
-    def __init__(self, *args):
-        for item in args[0]:
+    def __init__(self, iter_obj):
+        for item in iter_obj:
             self.__check_item(item)
 
-        super().__init__(*args)
+        super().__init__(iter_obj)
 
-    def __check_item(self, item):
+    @staticmethod
+    def __check_item(item):
         if not isinstance(item, int):
             raise TypeError('можно передавать только целочисленные значения')
 
@@ -41,11 +42,6 @@ class ListInteger(list):
         self.__check_item(item)
         super().append(item)
 
-    def __repr__(self):
-        self.__str__()
-
-    def __str__(self):
-        return f"{[i for i in self]}"
 
 s = ListInteger((1, 2, 3))
 s[1] = 10
