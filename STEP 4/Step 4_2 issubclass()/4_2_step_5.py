@@ -63,27 +63,25 @@ class Thing:
         self.price = price
         self.weight= weight
 
+    def __hash__(self):
+        return hash((self.name, self.price, self.weight))
+
 
 class DictShop(dict):
     def __init__(self, thing=None):
-        if not thing:
-            thing = dict()
-        elif not isinstance(thing, dict):
+        thing = dict() if thing is None else thing
+
+        if not isinstance(thing, dict):
             raise TypeError('аргумент должен быть словарем')
 
-        for key in thing.keys():
-            self.__chek_key(key)
+        if thing and not all(isinstance(key, Thing) for key in thing):
+            raise TypeError('ключами могут быть только объекты класса Thing')
 
         super().__init__(thing)
 
-
-    @staticmethod
-    def __chek_key(key):
+    def __setitem__(self, key, value):
         if not isinstance(key, Thing):
             raise TypeError('ключами могут быть только объекты класса Thing')
-
-    def __setitem__(self, key, value):
-        self.__chek_key(key)
         super().__setitem__(key, value)
 
 
