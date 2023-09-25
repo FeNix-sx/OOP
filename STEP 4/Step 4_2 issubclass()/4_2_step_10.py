@@ -27,7 +27,14 @@ P.S. В программе нужно объявить только классы
 """
 class IteratorAttrs:
     def __iter__(self):
-        return iter(self.__dict__.items())
+        self.items = list(self.__dict__.items())
+        return self
+
+    def __next__(self):
+        if self.items:
+            return self.items.pop(0)
+        else:
+            raise StopIteration
 
 class SmartPhone(IteratorAttrs):
     def __init__(self, model:str, size:tuple, memory:int):
