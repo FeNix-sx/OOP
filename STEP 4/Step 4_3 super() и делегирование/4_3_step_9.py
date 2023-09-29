@@ -14,7 +14,7 @@ P.S. В программе нужно объявить только класс. 
 # здесь объявляйте функцию-декоратор
 class SoftList(list):
     def __getitem__(self, item):
-        if item in range(-len(self), len(self)):
+        if -self.__len__() <= item < self.__len__():
             return super().__getitem__(item)
         return False
 
