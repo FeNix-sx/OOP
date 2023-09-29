@@ -22,15 +22,9 @@ pt[0] = 10
 P.S. В программе нужно объявить только классы. На экран выводить ничего не нужно.
 
 """
-class ItemAttrs:
+class ItemAttrs(list):
     def __init__(self, x, y):
-        self.coord = [x, y]
-
-    def __getitem__(self, item):
-        return self.coord[item]
-
-    def __setitem__(self, key, value):
-        self.coord[key] = value
+        super().__init__([x, y])
 
 
 class Point(ItemAttrs):
