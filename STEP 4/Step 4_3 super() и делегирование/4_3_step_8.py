@@ -74,7 +74,7 @@ class Vector:
         self.__coords = c if not reverse else c[::-1]
 
 
-v = Vector(1, 2, 3.3)
+v = Vector(1, 2, 3)
 print(v[1])
 v[0] = 10
 v[1] = 20
