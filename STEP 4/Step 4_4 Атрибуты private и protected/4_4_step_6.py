@@ -24,35 +24,28 @@ P.S. В программе нужно объявить только класс �
 На экран выводить ничего не нужно.
 """
 
+class Property:
+    def __set_name__(self, owner, name):
+        self.name = f'_{owner.__name__}__{name}'
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return property()
+        return getattr(instance, self.name)
+
+    def __set__(self, instance, value):
+        setattr(instance, self.name, value)
+
+
 class Animal:
+    name = Property()
+    kind = Property()
+    old = Property()
+
     def __init__(self, name, kind, old):
-        self.__name = name
-        self.__kind = kind
-        self.__old = old
-
-    @property
-    def name(self):
-        return self.__name
-
-    @name.setter
-    def name(self, value):
-        self.__name = value
-
-    @property
-    def kind(self):
-        return self.__kind
-
-    @kind.setter
-    def kind(self, value):
-        self.__kind = value
-
-    @property
-    def old(self):
-        return self.__old
-
-    @old.setter
-    def old(self, value):
-        self.__old = value
+        self.name = name
+        self.kind = kind
+        self.old = old
 
 
 animals = [
