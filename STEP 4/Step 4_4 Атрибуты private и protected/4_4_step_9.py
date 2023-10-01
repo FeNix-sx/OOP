@@ -42,47 +42,53 @@ WarPlane: Су-35, 7034, 34000, 2400, {"ракета": 4, "бомба": 7}
 
 P.S. В программе нужно объявить только классы и сформировать список На экран выводить ничего не нужно.
 """
+
+
 class Aircraft:
-    def __init__(self, model, mass, speed, top):
-        self._model = self.chek_str(model)
-        self._mass = self.check_float_int(mass)
-        self._speed = self.check_float_int(speed)
-        self._top = self.check_float_int(top)
+    def __init__(self, model: str, mass: int, speed: int, top: int):
+        self._model, self._mass = model, mass
+        self._speed, self._top = speed, top
 
-    @staticmethod
-    def chek_str(value):
-        if isinstance(value, str):
-            return value
-        raise TypeError('неверный тип аргумента')
+    def __setattr__(self, key, value):
+        if key in ('_top', '_mass', '_speed'):
 
-    @staticmethod
-    def check_int(value):
-        if type(value) == int and value > 0:
-            return value
-        raise TypeError('неверный тип аргумента')
+            if value < 0:
+                raise TypeError('неверный тип аргумента')
 
-    @staticmethod
-    def check_float_int(value):
-        if type(value) in [int, float] and value > 0:
-            return value
-        raise TypeError('неверный тип аргумента')
+            if not isinstance(value, int):
+                raise TypeError('неверный тип аргумента')
+
+        elif key == '_model':
+            if not isinstance(value, str):
+                raise TypeError('неверный тип аргумента')
+
+        object.__setattr__(self, key, value)
+
 
 class PassengerAircraft(Aircraft):
-    def __init__(self, model, mass, speed, top, chairs):
+    def __init__(self, model: str, mass: int, speed: int, top: int, chairs: int):
         super().__init__(model, mass, speed, top)
-        self._chairs = self.check_int(chairs)
+        self._chairs = chairs
+
+    def __setattr__(self, key, value):
+        if key == '_chairs':
+            if not isinstance(value, int):
+                raise TypeError('неверный тип аргумента')
+
+        object.__setattr__(self, key, value)
 
 
 class WarPlane(Aircraft):
-    def __init__(self, model, mass, speed, top, weapons:dict):
+    def __init__(self, model: str, mass: int, speed: int, top: int, weapons: dict):
         super().__init__(model, mass, speed, top)
-        self._weapons = self.check_dict(weapons)
+        self._weapons = weapons
 
-    @staticmethod
-    def check_dict(value):
-        if isinstance(value, dict):
-            return value
-        raise TypeError('неверный тип аргумента')
+    def __setattr__(self, key, value):
+        if key == '_weapons':
+            if not isinstance(value, dict):
+                raise TypeError('неверный тип аргумента')
+
+        object.__setattr__(self, key, value)
 
 
 planes = [
