@@ -32,6 +32,7 @@ class Subject:
     def change_data(self, data):
         self.__data = data
         self.__notify_observer()
+
 Здесь в объектах класса Subject можно зарегистрировать (добавить) множество
 объектов класса Observer (наблюдатель, слушатель). Это делается с помощью
 метода add_observer(). Затем, когда данные (self.__data) меняются путем вызова
@@ -53,6 +54,7 @@ class Data:
         self.temp = temp    # температура
         self.press = press  # давление
         self.wet = wet      # влажность
+
 А вам поручается разработать дочерние классы, унаследованные от класса
 Observer, с именами:
 
@@ -93,6 +95,74 @@ subject.change_data(Data(24, 148, 80))
 # Текущее давление 148
 P.S. В программе нужно объявить только классы. На экран выводить ничего не нужно.
 """
+class Observer:
+    def update(self, data):
+        pass
+
+    def __hash__(self):
+        return hash(id(self))
 
 
+class Subject:
+    def __init__(self):
+        self.__observers = {}
+        self.__data = None
 
+    def add_observer(self, observer):
+        self.__observers[observer] = observer
+
+    def remove_observer(self, observer):
+        if observer in self.__observers:
+            self.__observers.pop(observer)
+
+    def __notify_observer(self):
+        for ob in self.__observers:
+            ob.update(self.__data)
+
+    def change_data(self, data):
+        self.__data = data
+        self.__notify_observer()
+
+
+class Data:
+    def __init__(self, temp, press, wet):
+        self.temp = temp    # температура
+        self.press = press  # давление
+        self.wet = wet      # влажность
+
+
+# здесь объявляйте дочерние классы TemperatureView, PressureView и WetView
+class TemperatureView(Observer):
+    def update(self, data: Data):
+        print(f'Текущая температура {data.temp}')
+
+
+class PressureView(Observer):
+    def update(self, data: Data):
+        print(f'Текущее давление {data.press}')
+
+
+class WetView(Observer):
+    def update(self, data: Data):
+        print(f'Текущая влажность {data.wet}')
+
+
+subject = Subject()
+tv = TemperatureView()
+pr = PressureView()
+wet = WetView()
+
+subject.add_observer(tv)
+subject.add_observer(pr)
+subject.add_observer(wet)
+
+subject.change_data(Data(23, 150, 83))
+# выведет строчки:
+# Текущая температура 23
+# Текущее давление 150
+# Текущая влажность 83
+subject.remove_observer(wet)
+subject.change_data(Data(24, 148, 80))
+# выведет строчки:
+# Текущая температура 24
+# Текущее давление 148
