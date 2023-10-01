@@ -52,19 +52,18 @@ P.S. В программе нужно объявить только класс �
 #     return decorated
 
 # здесь объявляйте декоратор и все что с ним связано
-
-def log_decor(func, log: list):
-    def wrapper(*args, **kwargs):
-        log.append(func.__name__)
-        return func(*args, **kwargs)
-
-    return wrapper
-
 def class_log(log:list=None):
     def log_metods(cls):
+        def log_decor(func):
+            def wrapper(*args, **kwargs):
+                log.append(func.__name__)
+                return func(*args, **kwargs)
+            return wrapper
+
+
         methods = {k: v for k, v in cls.__dict__.items() if callable(v)}
         for k, v in methods.items():
-            setattr(cls, k, log_decor(v, log))
+            setattr(cls, k, log_decor(v))
 
         return cls
     return log_metods
