@@ -43,15 +43,7 @@ def integer_params(cls):
 P.S. В программе нужно объявить только класс и необходимые функции.
 На экран выводить ничего не нужно.
 """
-# здесь объявляйте декоратор и все что с ним связано
-# def class_log(vector_log: list=None):
-#     def decorated(test):
-#         def wrapper(self, *args, **kwargs):
-#             return self
-#         return wrapper
-#     return decorated
 
-# здесь объявляйте декоратор и все что с ним связано
 def class_log(log:list=None):
     def log_metods(cls):
         def log_decor(func):
