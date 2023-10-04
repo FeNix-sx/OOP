@@ -50,6 +50,9 @@ class FloatValidator(Validator):
         self.max_value = max_value
 
     def __call__(self, data, *args, **kwargs):
+        return self._is_valid(data)
+
+    def _is_valid(self, data):
         return isinstance(data, float) and self.min_value <= data <= self.max_value
 
 
