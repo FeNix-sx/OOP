@@ -14,6 +14,7 @@ class Transport(ABC):
     @abstractmethod
     def speed(self):
         """Абстрактный объект-свойство"""
+
 Используя эту информацию и информацию о модуле abc из подвига 6,
 объявите базовый класс с именем CountryInterface со следующими абстрактными методами и свойствами:
 
@@ -46,3 +47,74 @@ country.square = 354005483.0
 print(country.get_info()) # Россия: 354005483.0, 150000000
 P.S. В программе требуется объявить только классы. На экран выводить ничего не нужно.
 '''
+from abc import ABC, abstractmethod
+
+# здесь объявляйте классы
+class CountryInterface(ABC):
+    @property
+    @abstractmethod
+    def name(self):
+        """Абстрактный объект-свойство"""
+        return self.name
+
+    @property
+    @abstractmethod
+    def population(self):
+        """Абстрактный объект-свойство"""
+        return self.population
+
+    @property
+    @abstractmethod
+    def square(self):
+        """Абстрактный объект-свойство"""
+        return self.square
+
+    @abstractmethod
+    def get_info(self):
+        return f"{self.name}: {self.square}, {self.population}"
+
+
+class Country(CountryInterface):
+    def __init__(self, name, population, square):
+        self.__name = name
+        self.__population = population
+        self.__square = square
+
+    @property
+    def name(self):
+        """Абстрактный объект-свойство"""
+        return self.__name
+
+    @name.setter
+    def name(self, value):
+        self.__name = value
+
+    @property
+    def population(self):
+        """Абстрактный объект-свойство"""
+        return self.__population
+
+    @population.setter
+    def population(self, value):
+        self.__population = value
+
+    @property
+    def square(self):
+        """Абстрактный объект-свойство"""
+        return self.__square
+
+    @square.setter
+    def square(self, value):
+        self.__square = value
+
+    def get_info(self):
+        return f"{self.name}: {self.square}, {self.population}"
+
+
+
+country = Country("Россия", 140000000, 324005489.55)
+name = country.name
+pop = country.population
+country.population = 150000000
+country.square = 354005483.0
+print(country.get_info()) # Россия: 354005483.0, 150000000
