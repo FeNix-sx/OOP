@@ -59,11 +59,11 @@ class Note:
         self._ton = ton
 
     def __setattr__ (self, key, value):
-        if key == '_name' and value in ('до', 'ре', 'ми', 'фа', 'соль', 'ля', 'си'):
-            return object.__setattr__(self, key, value)
-        elif key == '_ton' and -1 <= value <= 1:
-            return object.__setattr__(self, key, value)
-        raise ValueError('недопустимое значение аргумента')
+        if key == '_name' and value not in ('до', 'ре', 'ми', 'фа', 'соль', 'ля', 'си'):
+            raise ValueError('недопустимое значение аргумента')
+        elif key == '_ton' and not(-1 <= value <= 1):
+            raise ValueError('недопустимое значение аргумента')
+        object.__setattr__(self, key, value)
 
 class Notes:
     __slots__ = (
@@ -75,7 +75,9 @@ class Notes:
         '_la',
         '_si'
     )
+    _notes = ('до', 'ре', 'ми', 'фа', 'соль', 'ля', 'си')
     __isinstans = None
+
     def __new__(cls, *args, **kwargs):
         if not cls.__isinstans:
             cls.__isinstans = super().__new__(cls)
@@ -83,13 +85,8 @@ class Notes:
         return cls.__isinstans
 
     def __init__(self):
-        self._do = Note('до', 0)
-        self._re = Note('ре', 0)
-        self._mi = Note('ми', 0)
-        self._fa = Note('фа', 0)
-        self._solt = Note('соль', 0)
-        self._la = Note('ля', 0)
-        self._si = Note('си', 0)
+        for name, value in zip(self.__slots__, self._notes):
+            setattr(self, name,  Note(value, 0))
 
     def __getitem__(self, item):
         notes = [
@@ -107,8 +104,6 @@ class Notes:
             return notes[item]
         raise IndexError('недопустимый индекс')
 
-    def __setitem__(self, key, value):
-        print(key, value)
 
 
 notes = Notes()
