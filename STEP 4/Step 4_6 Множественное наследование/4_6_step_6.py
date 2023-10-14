@@ -79,25 +79,12 @@ class ShopItem:
 # здесь объявляйте классы ShopGenericView и ShopUserView
 class ShopGenericView:
     def __str__(self):
-        result = ""
-        for name, value in self.__dict__.items():
-            result += f'{name}: {value}\n'
-        return f"{result}"
-
-    def __repr__(self):
-        return str(self)
+        return "\n".join(f'{name}: {value}' for name, value in self.__dict__.items())
 
 
-class ShopUserView(ShopGenericView):
+class ShopUserView:
     def __str__(self):
-        result = ""
-        for name, value in self.__dict__.items():
-            if name != '_id':
-                result += f'{name}: {value}\n'
-        return f"{result}"
-
-    def __repr__(self):
-        return str(self)
+        return "\n".join(f'{name}: {value}' for name, value in self.__dict__.items() if name != '_id')
 
 
 class Book(ShopItem, ShopGenericView):
@@ -117,7 +104,12 @@ print(book)
 # _year: 2022
 
 # Другой вариант использования классов:
-class Book(ShopItem, ShopUserView): ...
+class Book(ShopItem, ShopUserView):
+    def __init__(self, title, author, year):
+        super().__init__()
+        self._title = title
+        self._author = author
+        self._year = year
 book = Book("Python ООП", "Балакирев", 2022)
 print(book)
 # на экране увидим строчки:
