@@ -67,8 +67,7 @@ class SolarSystem:
         if not cls.__instans:
             cls.__instans = super().__new__(cls)
             return cls.__instans
-        else:
-            return cls.__instans
+        return cls.__instans
 
     def __init__(self):
         self._mercury = Planet('Меркурий', 4878, 87.97, 1407.5)
