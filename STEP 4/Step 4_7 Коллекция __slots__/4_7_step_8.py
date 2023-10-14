@@ -46,37 +46,29 @@ class Star:
         self._temp = temp
 
 
-class WhiteDwarf(Star):
-    __slots__ = ('_type_star', '_radius')
+class TypeStar(Star):
+    __slots__ = '_type_star', '_radius',
+
     def __init__(self, name, massa, temp, type_star, radius):
         super().__init__(name, massa, temp)
         self._type_star = type_star
         self._radius = radius
 
 
-class YellowDwarf(Star):
-    __slots__ = ('_type_star', '_radius')
-    def __init__(self, name, massa, temp, type_star, radius):
-        super().__init__(name, massa, temp)
-        self._type_star = type_star
-        self._radius = radius
+class WhiteDwarf(TypeStar):
+    __slots__ = ()
 
 
-class RedGiant(Star):
-    __slots__ = ('_type_star', '_radius')
-    def __init__(self, name, massa, temp, type_star, radius):
-        super().__init__(name, massa, temp)
-        self._type_star = type_star
-        self._radius = radius
+class YellowDwarf(TypeStar):
+    __slots__ = ()
 
 
-class Pulsar(Star):
-    __slots__ = ('_type_star', '_radius')
-    def __init__(self, name, massa, temp, type_star, radius):
-        super().__init__(name, massa, temp)
-        self._type_star = type_star
-        self._radius = radius
+class RedGiant(TypeStar):
+    __slots__ = ()
 
+
+class Pulsar(TypeStar):
+    __slots__ = ()
 
 stars = [
     RedGiant ('Альдебаран', 5, 3600, 'красный гигант', 45),
